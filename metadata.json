@@ -1,0 +1,7 @@
+{
+  "name": "Gardening Assistant (Farsi)",
+  "description": "An intelligent gardening assistant in Farsi that identifies plants from photos and provides detailed care instructions and allows users to ask follow-up questions.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
