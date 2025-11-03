@@ -1,10 +1,10 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
-import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import type { Chat as ChatType } from '@google/genai';
 
-// --- START OF types.ts content ---
+// --- Content from types.ts ---
 interface ChatMessage {
   role: 'user' | 'model';
   text: string;
@@ -15,10 +15,8 @@ interface Reminder {
   interval: number; // in days
   startDate: number; // timestamp
 }
-// --- END OF types.ts content ---
 
-
-// --- START OF components/icons.tsx content ---
+// --- Content from components/icons.tsx ---
 const UploadIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -66,10 +64,8 @@ const ShareIcon = ({ className }: { className?: string }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.368a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
     </svg>
 );
-// --- END OF components/icons.tsx content ---
 
-
-// --- START OF services/geminiService.ts content ---
+// --- Content from services/geminiService.ts ---
 const API_KEY = process.env.API_KEY;
 
 if (!API_KEY) {
@@ -77,7 +73,6 @@ if (!API_KEY) {
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
-const model = ai.models;
 
 const PLANT_IDENTIFICATION_PROMPT = `
 شما یک دستیار متخصص باغبانی به زبان فارسی هستید. وظیفه شما شناسایی گیاه موجود در این تصویر است.
@@ -113,7 +108,7 @@ const analyzePlantImage = async (base64Image: string, mimeType: string): Promise
     text: PLANT_IDENTIFICATION_PROMPT,
   };
 
-  const response = await model.generateContent({
+  const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
     contents: { parts: [imagePart, textPart] },
   });
@@ -122,7 +117,7 @@ const analyzePlantImage = async (base64Image: string, mimeType: string): Promise
 };
 
 
-const createChatSession = (): Chat => {
+const createChatSession = (): ChatType => {
     return ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {
@@ -131,14 +126,12 @@ const createChatSession = (): Chat => {
     });
 };
 
-const sendMessageToChat = async (chat: Chat, message: string): Promise<GenerateContentResponse> => {
+const sendMessageToChat = async (chat: ChatType, message: string): Promise<GenerateContentResponse> => {
     const response = await chat.sendMessage({ message });
     return response;
 };
-// --- END OF services/geminiService.ts content ---
 
-
-// --- START OF App.tsx content ---
+// --- Content from App.tsx ---
 // Add type definitions for SpeechRecognition API as it's not a standard part of TypeScript's DOM library.
 interface SpeechRecognition {
   continuous: boolean;
@@ -647,10 +640,8 @@ const App: React.FC = () => {
     </div>
   );
 };
-// --- END OF App.tsx content ---
 
-
-// --- START OF original index.tsx content ---
+// --- Original index.tsx content ---
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");
@@ -662,4 +653,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-// --- END OF original index.tsx content ---
